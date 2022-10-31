@@ -15,3 +15,5 @@ export enum HttpContentType {
   json = "application/json",
   xml = "text/xml",
 }
+
+export const NON_HTTP_REQUEST_PROPERTY_NAME = "__nonHTTPRequestMethod__";

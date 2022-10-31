@@ -1,9 +1,11 @@
 import {
   ResponseType as AxiosResponseType,
-  AxiosTransformer, AxiosRequestConfig,
+  AxiosRequestConfig,
+  AxiosResponseTransformer,
+  AxiosRequestTransformer,
 } from "axios";
+import { BaseService } from "./BaseService";
 import { HttpMethod } from "./constants";
-import { BaseService } from "./baseService";
 
 interface Headers {
   [x: string]: string | number;
@@ -52,8 +54,16 @@ const ensureMeta = (target: BaseService, methodName: string) => {
  * @param url
  * @param options
  */
-const registerMethod = (method: HttpMethod, url: string, options?: HttpMethodOptions) => {
-  return (target: BaseService, methodName: string, descriptor: PropertyDescriptor) => {
+const registerMethod = (
+  method: HttpMethod,
+  url: string,
+  options?: HttpMethodOptions,
+) => {
+  return (
+    target: BaseService,
+    methodName: string,
+    descriptor: PropertyDescriptor,
+  ) => {
     ensureMeta(target, methodName);
     target.__meta__[methodName].method = method;
     target.__meta__[methodName].path = url;
@@ -223,7 +233,11 @@ export const Header = (paramName: string) => {
  * @sample @HeaderMap headers: any
  * @constructor
  */
-export const HeaderMap = (target: any, methodName: string, paramIndex: number) => {
+export const HeaderMap = (
+  target: any,
+  methodName: string,
+  paramIndex: number,
+) => {
   ensureMeta(target, methodName);
   target.__meta__[methodName].headerMapIndex = paramIndex;
 };
@@ -235,7 +249,11 @@ export const HeaderMap = (target: any, methodName: string, paramIndex: number) =
  * @constructor
  */
 export const QueryArrayFormat = (queryArrayFormat: QueryArrayFormat) => {
-  return (target: BaseService, methodName: string, descriptor: PropertyDescriptor) => {
+  return (
+    target: BaseService,
+    methodName: string,
+    descriptor: PropertyDescriptor,
+  ) => {
     ensureMeta(target, methodName);
     target.__meta__[methodName].queryArrayFormat = queryArrayFormat;
   };
@@ -285,7 +303,11 @@ export const Query = (paramName: string) => {
  * @sample @QueryMap query: SearchQuery
  * @constructor
  */
-export const QueryMap = (target: any, methodName: string, paramIndex: number) => {
+export const QueryMap = (
+  target: any,
+  methodName: string,
+  paramIndex: number,
+) => {
   ensureMeta(target, methodName);
   target.__meta__[methodName].queryMapIndex = paramIndex;
 };
@@ -298,8 +320,14 @@ export const QueryMap = (target: any, methodName: string, paramIndex: number) =>
  * @sample @FormUrlEncoded
  * @constructor
  */
-export const FormUrlEncoded = (target: any, methodName: string, descriptor: PropertyDescriptor) => {
-  Headers({ "content-type": "application/x-www-form-urlencoded;charset=utf-8" })(target, methodName, descriptor);
+export const FormUrlEncoded = (
+  target: any,
+  methodName: string,
+  descriptor: PropertyDescriptor,
+) => {
+  Headers({
+    "content-type": "application/x-www-form-urlencoded;charset=utf-8",
+  })(target, methodName, descriptor);
 };
 
 /**
@@ -326,7 +354,11 @@ export const Field = (paramName: string) => {
  * @sample @FieldMap post: Post
  * @constructor
  */
-export const FieldMap = (target: any, methodName: string, paramIndex: number) => {
+export const FieldMap = (
+  target: any,
+  methodName: string,
+  paramIndex: number,
+) => {
   ensureMeta(target, methodName);
   target.__meta__[methodName].fieldMapIndex = paramIndex;
 };
@@ -339,8 +371,16 @@ export const FieldMap = (target: any, methodName: string, paramIndex: number) =>
  * @sample @Multipart
  * @constructor
  */
-export const Multipart = (target: any, methodName: string, descriptor: PropertyDescriptor) => {
-  Headers({ "content-type": "multipart/form-data" })(target, methodName, descriptor);
+export const Multipart = (
+  target: any,
+  methodName: string,
+  descriptor: PropertyDescriptor,
+) => {
+  Headers({ "content-type": "multipart/form-data" })(
+    target,
+    methodName,
+    descriptor,
+  );
 };
 
 /**
@@ -381,7 +421,7 @@ export const ResponseType = (responseType: AxiosResponseType) => {
  *         })
  * @constructor
  */
-export const RequestTransformer = (transformer: AxiosTransformer) => {
+export const RequestTransformer = (transformer: AxiosRequestTransformer) => {
   return (target: any, methodName: string) => {
     ensureMeta(target, methodName);
     target.__meta__[methodName].requestTransformer = transformer;
@@ -398,7 +438,7 @@ export const RequestTransformer = (transformer: AxiosTransformer) => {
  *         })
  * @constructor
  */
-export const ResponseTransformer = (transformer: AxiosTransformer) => {
+export const ResponseTransformer = (transformer: AxiosResponseTransformer) => {
   return (target: any, methodName: string) => {
     ensureMeta(target, methodName);
     target.__meta__[methodName].responseTransformer = transformer;
@@ -467,7 +507,11 @@ export const GraphQL = (query: string, operationName?: string) => {
  * @sample @GraphQLVariables variables: any
  * @constructor
  */
-export const GraphQLVariables = (target: any, methodName: string, paramIndex: number) => {
+export const GraphQLVariables = (
+  target: any,
+  methodName: string,
+  paramIndex: number,
+) => {
   ensureMeta(target, methodName);
   target.__meta__[methodName].gqlVariablesIndex = paramIndex;
 };
